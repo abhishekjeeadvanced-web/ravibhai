@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitu loves Ravi Bhai</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Arial', sans-serif;
+background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff, #5f27cd);
+background-size: 400% 400%;
+animation: gradientShift 8s ease infinite;
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+position: relative;
+}
+
+@keyframes gradientShift {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+
+.container {
+text-align: center;
+padding: 20px;
+max-width: 90vw;
+}
+
+.main-text {
+font-size: min(3rem, 8vw);
+font-weight: bold;
+color: white;
+text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+margin-bottom: 20px;
+animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.05); }
+}
+
+.counter {
+font-size: 1.5rem;
+color: white;
+background: rgba(255,255,255,0.2);
+padding: 10px 20px;
+border-radius: 25px;
+display: inline-block;
+margin-bottom: 30px;
+backdrop-filter: blur(10px);
+}
+
+.buttons {
+display: flex;
+gap: 15px;
+justify-content: center;
+flex-wrap: wrap;
+margin-bottom: 30px;
+}
+
+button {
+padding: 12px 24px;
+font-size: 1rem;
+border: none;
+border-radius: 25px;
+cursor: pointer;
+transition: all 0.3s ease;
+font-weight: bold;
+box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+background: white;
+color: #ff6b6b;
+}
+
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+background: rgba(255,255,255,0.2);
+color: white;
+backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+background: rgba(255,255,255,0.3);
+transform: translateY(-2px);
+}
+
+.display-area {
+min-height: 200px;
+background: rgba(255,255,255,0.1);
+border-radius: 20px;
+padding: 20px;
+margin-bottom: 20px;
+backdrop-filter: blur(10px);
+overflow-y: auto;
+max-height: 60vh;
+position: relative;
+}
+
+.message {
+font-size: 1.2rem;
+color: white;
+margin-bottom: 10px;
+animation: slideIn 0.5s ease;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+@keyframes slideIn {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.hearts {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+pointer-events: none;
+overflow: hidden;
+}
+
+.heart {
+position: absolute;
+font-size: 24px;
+animation: float 4s ease-in infinite;
+opacity: 0.8;
+}
+
+@keyframes float {
+0% {
+transform: translateY(100vh) rotate(0deg);
+opacity: 0;
+}
+10% {
+opacity: 0.8;
+}
+90% {
+opacity: 0.8;
+}
+100% {
+transform: translateY(-100px) rotate(360deg);
+opacity: 0;
+}
+}
+
+.confetti {
+position: absolute;
+width: 10px;
+height: 10px;
+background: #f0f;
+animation: confetti-fall 3s linear infinite;
+}
+
+@keyframes confetti-fall {
+0% {
+transform: translateY(-100px) rotate(0deg);
+opacity: 1;
+}
+100% {
+transform: translateY(100vh) rotate(720deg);
+opacity: 0;
+}
+}
+
+.funny-messages {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 10px;
+margin-top: 20px;
+}
+
+.funny-message {
+background: rgba(255,255,255,0.15);
+padding: 10px;
+border-radius: 10px;
+font-size: 0.9rem;
+color: white;
+cursor: pointer;
+transition: all 0.3s ease;
+backdrop-filter: blur(5px);
+}
+
+.funny-message:hover {
+background: rgba(255,255,255,0.25);
+transform: scale(1.05);
+}
+
+.reset-btn {
+background: #ff6b6b;
+color: white;
+margin-top: 15px;
+}
+
+.reset-btn:hover {
+background: #ff5252;
+transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+.main-text {
+font-size: 2rem;
+}
+.counter {
+font-size: 1.2rem;
+}
+.buttons {
+flex-direction: column;
+align-items: center;
+}
+button {
+width: 100%;
+max-width: 250px;
+}
+}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+<div class="container">
+<h1 class="main-text">Pitu loves Ravi Bhai</h1>
+<div class="counter" id="counter">0 times</div>
+
+<div class="buttons">
+<button class="btn-primary" onclick="declareLove()">Declare Love!</button>
+<button class="btn-secondary" onclick="autoMode()">Auto Mode</button>
+<button class="btn-secondary" onclick="stopAuto()">Stop Auto</button>
+<button class="btn-secondary reset-btn" onclick="resetCounter()">Reset</button>
+</div>
+
+<div class="display-area" id="displayArea">
+<div class="message">💕 Welcome! Click "Declare Love!" to start the magic! 💕</div>
+</div>
+
+<div class="funny-messages" id="funnyMessages"></div>
+</div>
+
+<script>
+let count = 0;
+let autoInterval = null;
+const funnyMessages = [
+"Pitu: Ravi Bhai, you're my sunshine! ☀️",
+"Ravi Bhai: I know, right? 😎",
+"Pitu: I love you more than pizza! 🍕",
+"Ravi Bhai: That's saying something! 😅",
+"Pitu: You're my favorite person! ⭐",
+"Ravi Bhai: Aw, thanks Pitu! 🤗",
+"Pitu: Marry me already! 💍",
+"Ravi Bhai: Let's talk about it! 😉",
+"Pitu: You're the best! 🏆",
+"Ravi Bhai: I try! 💪",
+"Pitu: I love you to the moon and back! 🌙",
+"Ravi Bhai: And back again! 🚀",
+"Pitu: You're my everything! 🌟",
+"Ravi Bhai: And you're my Pitu! 💝",
+"Pitu: I love you even when you eat my food! 🍜",
+"Ravi Bhai: That's true love! ❤️",
+"Pitu: You're my superhero! 🦸",
+"Ravi Bhai: With a cape! 🦸‍♂️",
+"Pitu: I love you more than my phone! 📱",
+"Ravi Bhai: Now that's dedication! 🎯",
+"Pitu: You're my rock! 🪨",
+"Ravi Bhai: And you're my diamond! 💎",
+"Pitu: I love you even when you snore! 😴",
+"Ravi Bhai: Only you can say that! 😂",
+"Pitu: You're my forever! ♾️",
+"Ravi Bhai: Forever and always! 💑",
+"Pitu: I love you more than ice cream! 🍦",
+"Ravi Bhai: But ice cream is amazing! 🍨",
+"Pitu: You're my dream come true! 💭",
+"Ravi Bhai: Dreams do come true! ✨",
+"Pitu: I love you even when you forget! 🧠",
+"Ravi Bhai: I'll try to remember! 📝",
+"Pitu: You're my everything and more! 🌈",
+"Ravi Bhai: And more, and more! ♾️",
+"Pitu: I love you to infinity! ∞",
+"Ravi Bhai: And beyond! 🚀",
+"Pitu: You're my heart! ❤️",
+"Ravi Bhai: And you're my soul! 💫",
+"Pitu: I love you more than anything! 🌍",
+"Ravi Bhai: Anything and everything! 🌟",
+"Pitu: You're my life! 🌿",
+"Ravi Bhai: And you're my reason! 💡",
+"Pitu: I love you even when you play games! 🎮",
+"Ravi Bhai: Games and you are my life! 🎮❤️",
+"Pitu: You're my happiness! 😊",
+"Ravi Bhai: And you're my joy! 🤗",
+"Pitu: I love you more than sleep! 😴",
+"Ravi Bhai: Now that's real love! 💕",
+"Pitu: You're my magic! 🪄",
+"Ravi Bhai: And you're my spell! ✨",
+"Pitu: I love you to the ends of the earth! 🌍",
+"Ravi Bhai: And back again! 🔄",
+"Pitu: You're my forever person! ♾️",
+"Ravi Bhai: Forever is a long time! ⏰",
+"Pitu: I love you even when you eat slowly! 🐌",
+"Ravi Bhai: Good things come to those who wait! ⏳",
+"Pitu: You're my everything, Ravi Bhai! 🌟",
+"Ravi Bhai: And you're my Pitu, forever! 💝"
+];
+
+function declareLove() {
+count++;
+updateCounter();
+addMessage();
+createHearts();
+createConfetti();
+updateFunnyMessages();
+
+if (count % 10 === 0) {
+specialCelebration();
+}
+}
+
+function updateCounter() {
+document.getElementById('counter').textContent = `${count} times`;
+}
+
+function addMessage() {
+const displayArea = document.getElementById('displayArea');
+const messageDiv = document.createElement('div');
+messageDiv.className = 'message';
+
+const randomIndex = Math.floor(Math.random() * funnyMessages.length);
+messageDiv.textContent = funnyMessages[randomIndex];
+
+displayArea.appendChild(messageDiv);
+displayArea.scrollTop = displayArea.scrollHeight;
+
+if (count > 1) {
+setTimeout(() => {
+messageDiv.style.opacity = '0.7';
+}, 2000);
+}
+}
+
+function createHearts() {
+const heartsContainer = document.getElementById('hearts');
+for (let i = 0; i < 5; i++) {
+setTimeout(() => {
+const heart = document.createElement('div');
+heart.className = 'heart';
+heart.textContent = '❤️';
+heart.style.left = Math.random() * 100 + '%';
+heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+heart.style.animationDelay = Math.random() * 2 + 's';
+heartsContainer.appendChild(heart);
+
+setTimeout(() => {
+heart.remove();
+}, 5000);
+}, i * 200);
+}
+}
+
+function createConfetti() {
+for (let i = 0; i < 20; i++) {
+setTimeout(() => {
+const confetti = document.createElement('div');
+confetti.className = 'confetti';
+confetti.style.left = Math.random() * 100 + '%';
+confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
+confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+confetti.style.animationDelay = Math.random() * 1 + 's';
+document.body.appendChild(confetti);
+
+setTimeout(() => {
+confetti.remove();
+}, 4000);
+}, i * 100);
+}
+}
+
+function updateFunnyMessages() {
+const funnyMessagesContainer = document.getElementById('funnyMessages');
+funnyMessagesContainer.innerHTML = '';
+
+const startIndex = Math.floor(Math.random() * (funnyMessages.length - 4));
+for (let i = 0; i < 4; i++) {
+const msgIndex = (startIndex + i) % funnyMessages.length;
+const msgDiv = document.createElement('div');
+msgDiv.className = 'funny-message';
+msgDiv.textContent = funnyMessages[msgIndex];
+msgDiv.onclick = () => {
+declareLove();
+msgDiv.style.background = 'rgba(255,255,255,0.3)';
+};
+funnyMessagesContainer.appendChild(msgDiv);
+}
+}
+
+function specialCelebration() {
+const displayArea = document.getElementById('displayArea');
+const specialDiv = document.createElement('div');
+specialDiv.className = 'message';
+specialDiv.style.fontSize = '1.5rem';
+specialDiv.style.color = '#ffd700';
+specialDiv.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+specialDiv.innerHTML = `🎉 SPECIAL MILESTONE! ${count} times! 🎊`;
+displayArea.appendChild(specialDiv);
+
+// Extra celebration
+for (let i = 0; i < 10; i++) {
+createHearts();
+createConfetti();
+}
+}
+
+function autoMode() {
+if (autoInterval) return;
+autoInterval = setInterval(() => {
+declareLove();
+}, 1000);
+}
+
+function stopAuto() {
+if (autoInterval) {
+clearInterval(autoInterval);
+autoInterval = null;
+}
+}
+
+function resetCounter() {
+count = 0;
+updateCounter();
+document.getElementById('displayArea').innerHTML = '<div class="message">💕 Fresh start! Let the love flow again! 💕</div>';
+updateFunnyMessages();
+stopAuto();
+}
+
+// Initialize funny messages
+updateFunnyMessages();
+
+// Add some initial hearts and confetti
+setTimeout(() => {
+createHearts();
+createConfetti();
+}, 500);
+</script>
+</body>
+</html>
